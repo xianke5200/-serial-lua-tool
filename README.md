@@ -56,6 +56,8 @@
 - PySide 设置页持久化继续拆分，`pyside_settings.json` 的读写迁入 `clcom/pyside_app/settings/settings_store.py`，设置页保留表单和应用到串口的交互。
 - PySide 主窗口继续拆分，窗口状态迁入 `clcom/pyside_app/main/main_window_state.py`，串口标签新增/拖出/还原/恢复迁入 `clcom/pyside_app/main/serial_tabs_controller.py`，关闭收尾迁入 `clcom/pyside_app/main/app_close_handler.py`，指令页迁入 `clcom/pyside_app/command/command_page.py`，`main_window.py` 继续收敛为主页面组装。
 - 设置页应用到当前/全部串口时会同步保存 `pyside_settings.json` 和串口标签配置；关闭软件时也会自动保存设置页当前值，下次启动按上次设置和标签配置恢复。
+- 自动更新最小替换清单扩展为 `clcom.exe`、`update.json`、`version.json` 和 `README.md`，更新后本地版本元数据和操作文档会同步到发布包版本。
+- 检查更新时如果用户配置中残留的旧更新清单地址访问失败，会自动回退到默认 GitHub Release 的 `update.json`，避免旧地址 403 直接中断检查。
 - 新增 `docs/legacy_tk_removal_plan.md`，记录旧 tkinter 文件冻结状态、测试迁移顺序、删除条件和每轮删除验收命令。
 - 继续保持 `224` 条回归测试通过，并完成 `clcom/**/*.py` 编译检查。
 - 旧版 tkinter 清理继续推进：移除 `main.py --tk` 入口、删除旧 `main.spec`、删除 `serial_gui.py`、旧 Tk UI 冒烟脚本、`clcom/ui/`、旧 Tk 小工具页、仅服务 Tk 注入的 `*_proxy.py` 和整个 `clcom/controllers/` 旧兼容层。
@@ -362,7 +364,7 @@ Lua 页提供脚本编辑、保存、补全、API 速查、运行、停止、日
 
 “关于”页提供“检查更新”。工具会从内置更新清单读取远程版本、发布包名称、SHA256 和更新说明，并和本地 `version.json` 或内置版本号进行比较。如果发现远程版本号更高，或同版本存在更新的发布包，会弹窗展示更新内容，并提供“打开发行版页面”和“下载并更新”。
 
-自动更新采用最小替换策略：下载 release zip 后先校验 SHA256，只从更新包中提取并替换 `clcom.exe` 和 `update.json`，不会覆盖 `scripts/`、`commands.json`、`config.json`、日志目录和用户脚本。由于 Windows 不能可靠覆盖正在运行的 exe，点击“下载并更新”后，工具会下载并准备更新，随后关闭当前软件，由后台临时脚本等待进程退出后完成替换并重新启动。
+自动更新采用最小替换策略：下载 release zip 后先校验 SHA256，只从更新包中提取并替换 `clcom.exe`、`update.json`、`version.json` 和 `README.md`，不会覆盖 `scripts/`、`commands.json`、`config.json`、日志目录和用户脚本。由于 Windows 不能可靠覆盖正在运行的 exe，点击“下载并更新”后，工具会下载并准备更新，随后关闭当前软件，由后台临时脚本等待进程退出后完成替换并重新启动。
 
 远程更新清单位于 GitHub Release 的 `update.json` 附件中，同时会复制到发布目录。每次发布新版 zip 后，需要同步更新其中的 `version`、`build_time`、`package_name`、`package_url`、`sha256` 和 `notes`。普通设置页不显示清单地址输入框，后续如需要切换到对象存储或自有静态地址，应由发布配置或内置常量统一控制。
 
