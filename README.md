@@ -2,6 +2,12 @@
 
 基于 Python + PySide6 的串口调试和 Lua 自动化工具，适合串口收发、指令管理、协议调试、OTA、字库下载和自动化测试。当前默认 GUI 入口为 PySide6，旧版 tkinter 入口、旧 Tk UI、旧 controller 和兼容代理已完成清理。
 
+## v3.06 更新摘要
+
+- 主日志显示区域支持字符级拖动选中和复制，支持同一行、跨行及反向选区。
+- 保持虚拟日志渲染和大日志滚动性能，`Ctrl+A` 仍可虚拟化全选全部日志。
+- 修复选区绘制与复制逻辑，保留过滤高亮、日志跳转和 Lua 日志定位能力。
+
 ## v3.05 更新摘要
 
 - 新增版本化的 clcom 软件能力知识库，普通问答和日志分析会自动检索串口、日志、AI、Lua、协议解析、流程及设置说明。
@@ -70,7 +76,7 @@
 - PySide AI 页继续拆分，本地规则分析迁入 `ai_analysis_page.py`，历史记录迁入 `ai_history_page.py`，AI 主页面收敛为布局、上下文载入、远程调用和结果动作入口。
 - PySide Lua 运行时继续拆分，错误详情/日志分析/运行报告迁入 `lua_report_page.py`，Lua/Python 数据转换工具迁入 `lua_runtime_helpers.py`，运行时主 mixin 继续收敛。
 - 流程编排纯逻辑迁入 `clcom/pyside_app/flow/flow_logic.py`，串口状态展示迁入 `clcom/core/serial_status.py`，旧 Tk controller 测试依赖已清理。
-- 新增 `tools/diagnostics/pre_release_check.py` 统一发布前检查入口，可一次执行编译、回归测试、稳定性冒烟、PySide UI 冒烟、短时压力测试和 `git diff --check`。
+- 新增 `tools/diagnostics/pre_release_check.py` 统一发布前检查入口，可一次执行编译、回归测试、稳定性冒烟、PySide UI 冒烟、短时压力测试、打包启动检查和 `git diff --check`。
 - Lua、流程编排、协议解析和 AI 页面补充更明确的空状态/占位提示，降低首次使用时的操作成本。
 - PySide 页面目录按功能分包整理：主窗口、串口、Lua、指令、流程、小工具、调试、设置、AI、关于和共享工具分别放入 `clcom/pyside_app/` 下的子目录；旧平铺兼容导出已删除，运行代码统一使用功能子包导入。
 - PySide 指令列表页面从 `main_window.py` 拆到 `clcom/pyside_app/command/command_page.py`，列表筛选、收藏优先和最近发送排序等纯逻辑拆到 `clcom/pyside_app/command/command_page_model.py`，主窗口继续收敛为页面组装入口。
@@ -251,10 +257,10 @@ python tools/diagnostics/field_reliability_check.py --duration 10
 发布前一键检查：
 
 ```bash
-python tools/diagnostics/pre_release_check.py --pressure-seconds 3
+py -3 -B tools/diagnostics/pre_release_check.py --pressure-seconds 3 --package-exe release/clcom.exe
 ```
 
-该脚本会依次执行源码编译、回归测试、稳定性冒烟、PySide UI 冒烟、短时多串口压力测试和 `git diff --check`。正式打包或创建 Gitee 发行版前建议先运行该命令。
+该脚本会依次执行源码编译、回归测试、稳定性冒烟、PySide UI 冒烟、短时多串口压力测试、指定打包版启动检查和 `git diff --check`。正式打包或创建发行版前必须确认 `release/clcom.exe` 已由本轮代码生成并通过该命令。
 
 ## 界面布局
 
