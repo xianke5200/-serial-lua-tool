@@ -2,6 +2,14 @@
 
 基于 Python + PySide6 的串口调试和 Lua 自动化工具，适合串口收发、指令管理、协议调试、OTA、字库下载和自动化测试。当前默认 GUI 入口为 PySide6，旧版 tkinter 入口、旧 Tk UI、旧 controller 和兼容代理已完成清理。
 
+## v3.06 更新摘要
+
+- AI 更多菜单默认隐藏评估、验收和 Agent 调试入口，输入维护密码后才可进入开发模式。
+- 增加 Evidence-Bounded AI Agent 架构：统一 ResolvedQuery、AgentPlan、SessionContext、只读 Tool、确定性证据和 Agent Trace。
+- 强化评估样本的脱敏、快照完整性、最终输出证据、幻觉检查和人工批准门禁。
+- 修复 About 页面后台更新检查线程在页面销毁后发送 Qt Signal 的异常。
+- 完善 TX/RX、Timeout、Retry、Protocol、Serial、Lua 专项评估和 V1.0 审计工具。
+
 ## v3.05 更新摘要
 
 - 修复 AI 远程报告不完整时候选经验被整体跳过的问题；带有 `evidence_refs` 的候选会保存为待确认经验，无证据候选继续拦截。
